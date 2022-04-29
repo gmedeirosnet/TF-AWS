@@ -86,11 +86,11 @@ resource "aws_route_table_association" "Public_association" {
 #######################
 ## sECURITY GROUP
 resource "aws_security_group" "web-sg-allow" {
-  name = "Allow all"
+  name        = "Allow all"
   description = "Allow all conections from internet to VPC"
-  vpc_id = aws_vpc.web_vpc
+  vpc_id      = aws_vpc.web_vpc.id
 
-ingress {
+  ingress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
@@ -98,18 +98,18 @@ ingress {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-egress {
+  egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
-  }  
+  }
 
   tags = {
     name = "Allow all"
   }
-  
+
 }
 
 ## NETWORK ACL
@@ -148,14 +148,14 @@ resource "aws_network_acl" "public_NACL" {
 resource "aws_network_interface" "eni" {
   subnet_id  = aws_subnet.private_subnet.id
   private_ip = "172.16.100.1"
-  
+
   tags = {
     name = "Primary network interface"
   }
 }
 
 
-## INSTANCE BASED ON AMI IN MARKTPLACE
+## INSTANCE BASED ON AMI BY MARKTPLACE
 ## UBUNTU 22.04 LTS x64
 resource "aws_instance" "web" {
   ami           = "ami-04505e74c0741db8d"
