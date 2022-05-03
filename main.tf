@@ -17,21 +17,25 @@ provider "aws" {
   region  = "us-east-1"
 }
 
+
+##############
+## NETWORK (VPC | SUBNET | SECURITY GROUP)
+## https://www.jlcp.com.br/criando-rede-vpc-na-aws-com-terraform
+##############
+
+
 ## EC2 VPC
 resource "aws_vpc" "web_vpc" {
+  ## Tenancy defines how EC2 instances are distributed across physical hardware and affects pricing.
+  instance_tenancy     = "default"
   cidr_block           = "172.16.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
 
   tags = {
-    name = "Main"
+    name = "main"
   }
 }
-
-##############
-## NETWORK
-## https://www.jlcp.com.br/criando-rede-vpc-na-aws-com-terraform
-##############
 
 ## SUBNET { Private }
 resource "aws_subnet" "private_subnet" {
@@ -85,7 +89,7 @@ resource "aws_route_table_association" "Public_association" {
 ## SECURITY
 #######################
 ## sECURITY GROUP
-resource "aws_security_group" "web-sg-allow" {
+resource "aws_security_group" "web-sg" {
   name        = "Allow all"
   description = "Allow all conections from internet to VPC"
   vpc_id      = aws_vpc.web_vpc.id
@@ -145,15 +149,16 @@ resource "aws_network_acl" "public_NACL" {
 ####################
 
 ## NETWORK INTERFACE
-resource "aws_network_interface" "eni" {
-  subnet_id  = aws_subnet.private_subnet.id
-  private_ip = "172.16.100.1"
+# resource "aws_network_interface" "web" {
+#   subnet_id           = aws_subnet.private_subnet.id
+#   private_private_ips = ["172.16.0.10"]
+#   security_groups     = [aws_security_group.web-sg.id]
 
-  tags = {
-    name = "Primary network interface"
-  }
-}
-
+#   attachment {
+#     instance     = aws_instance.web.id
+#     device_index = 1
+#   }
+# }
 
 ## INSTANCE BASED ON AMI BY MARKTPLACE
 ## UBUNTU 22.04 LTS x64
@@ -161,10 +166,10 @@ resource "aws_instance" "web" {
   ami           = "ami-04505e74c0741db8d"
   instance_type = "t2.micro"
 
-  network_interface {
-    network_interface_id = aws_network_interface.eni.id
-    device_index         = 0
-  }
+  # network_interface {
+  #   network_interface_id = aws_network_interface.web.id
+  #   device_index         = 0
+  # }
 
   tags = {
     name = "web"
