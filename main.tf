@@ -149,29 +149,29 @@ resource "aws_network_acl" "public_NACL" {
 ####################
 
 ## NETWORK INTERFACE
-# resource "aws_network_interface" "web" {
-#   subnet_id           = aws_subnet.private_subnet.id
-#   private_private_ips = ["172.16.0.10"]
-#   security_groups     = [aws_security_group.web-sg.id]
+resource "aws_network_interface" "web" {
+  subnet_id           = aws_subnet.private_subnet.id
+  private_private_ips = ["172.16.0.10"]
+  security_groups     = [aws_security_group.web-sg.id]
 
-#   attachment {
-#     instance     = aws_instance.web.id
-#     device_index = 1
-#   }
-# }
+  attachment {
+    instance     = aws_instance.web.id
+    device_index = 1
+  }
+}
 
 ## INSTANCE BASED ON AMI BY MARKTPLACE
 ## UBUNTU 22.04 LTS x64
-resource "aws_instance" "web" {
-  ami           = "ami-04505e74c0741db8d"
-  instance_type = "t2.micro"
+# resource "aws_instance" "web" {
+#   ami           = "ami-04505e74c0741db8d"
+#   instance_type = "t2.micro"
 
-  # network_interface {
-  #   network_interface_id = aws_network_interface.web.id
-  #   device_index         = 0
-  # }
+#   # network_interface {
+#   #   network_interface_id = aws_network_interface.web.id
+#   #   device_index         = 0
+#   # }
 
-  tags = {
-    name = "web"
-  }
-}
+#   tags = {
+#     name = "web"
+#   }
+# }
