@@ -162,16 +162,16 @@ resource "aws_network_interface" "web" {
 
 ## INSTANCE BASED ON AMI BY MARKTPLACE
 ## UBUNTU 22.04 LTS x64
-# resource "aws_instance" "web" {
-#   ami           = "ami-04505e74c0741db8d"
-#   instance_type = "t2.micro"
+resource "aws_instance" "web" {
+  ami           = "ami-04505e74c0741db8d"
+  instance_type = "t2.micro"
 
-#   # network_interface {
-#   #   network_interface_id = aws_network_interface.web.id
-#   #   device_index         = 0
-#   # }
+  # network_interface {
+  #   network_interface_id = aws_network_interface.web.id
+  #   device_index         = 0
+  # }
 
-#   tags = {
-#     name = "web"
-#   }
-# }
+  tags = {
+    name = "web"
+  }
+}
