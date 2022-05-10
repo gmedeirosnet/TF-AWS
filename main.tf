@@ -154,10 +154,10 @@ resource "aws_network_interface" "web" {
   private_ips     = ["172.16.0.10/24"]
   security_groups = [aws_security_group.web-sg.id]
 
-  attachment {
-    instance     = aws_instance.web.id
-    device_index = 1
-  }
+  # attachment {
+  #   instance     = aws_instance.web.id
+  #   device_index = 1
+  # }
 }
 
 ## INSTANCE BASED ON AMI BY MARKTPLACE
